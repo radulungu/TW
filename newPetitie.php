@@ -1,5 +1,7 @@
 <?php     
 
+        require "check_auth.php";
+
         /*functia construct_exp_date ia o data in format yyyy-mm-dd si o transforma intr-o data
         de tip dd-mm-yyyy hh-mm-ss astfel incat sa avem un format acceptat de baza de date*/
         function construct_exp_date($date) {
@@ -18,9 +20,10 @@
         /*var_dump($_GET['denumire_petitie']);
         var_dump($_GET['domeniu']);
         var_dump($_GET['data_expirare']);
-        var_dump($_GET['descriere']);*/
+        var_dump($_GET['descriere']);
+        exit();*/
         
-        $creator_id = 3; /*creator_id va fi implicit odata ce ne ocupam si de autentificare :D*/
+        $creator_id = $_SESSION["Auth_id"]; /*creator_id va fi implicit odata ce ne ocupam si de autentificare :D*/
         $numar_semnaturi = 0; /*cand creezi o noua petitie aceasta are 0 semnaturi*/
         $created_at = date('d-m-Y h:i:s', strtotime("now")); /*petitia a fost creata acum, deci folosim now*/
 
@@ -28,7 +31,7 @@
             $denumire_petitie = $_GET['denumire_petitie'];
         }
         if (isset($_GET['domeniu'])) {
-            $domeniu = $_GET['domeniu'];
+            $domeniu = ucfirst($_GET['domeniu']);
         }
         if (isset($_GET['data_expirare'])){
             $data_expirare= construct_exp_date($_GET['data_expirare']);
@@ -58,6 +61,8 @@
         echo "<p>Am incercat, maybe worked. Trust me.</p>";
 
         oci_free_statement($petition_insert);
+        
+        header("Location: ../Views/logged.php");
        
 ?>
         
